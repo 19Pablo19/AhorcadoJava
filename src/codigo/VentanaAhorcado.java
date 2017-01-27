@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import sun.management.snmp.util.MibLogger;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -36,8 +37,11 @@ public class VentanaAhorcado extends javax.swing.JFrame {
         //Dibujar la imagen del ahorcado sin fallos
         dibujaImagen(0);
         ponGuiones();
+        
     }
 
+
+    
     
     private void eligePalabraParaAdivinar(){
 //        listaDePalabras [0] = "CETYS";
@@ -87,9 +91,18 @@ listaDePalabras = new String [] {"CETYS", "MERCURIO", "VENUS", "TIERRA", "MARTE"
             case 5:  nombreImagen = (getClass().getResource("/imagenes/ahorcado_5.png")); break;
             case -1:  nombreImagen = (getClass().getResource("/imagenes/acertasteTodo.png")); break;
             default :  nombreImagen = (getClass().getResource("/imagenes/ahorcado_fin.png"));
-                    
+            nombreImagen = (getClass().getResource("/imagenes/gameOver.png"));
+         
+                  
+           
+            
         }
                  
+        if (numeroFallos == 6){
+           
+    }
+        
+        
         miImagen = new ImageIcon (new ImageIcon(nombreImagen).
                 getImage().getScaledInstance(panelAhorcado.getWidth(), alto, Image.SCALE_DEFAULT));
             
@@ -102,7 +115,8 @@ listaDePalabras = new String [] {"CETYS", "MERCURIO", "VENUS", "TIERRA", "MARTE"
        StringBuilder palabraConGuiones = new StringBuilder(pantalla.getText());
         if (palabraOculta.contains(letra)) {
             for (int i=0; i < palabraOculta.length(); i++) {
-               if (palabraOculta.charAt(i) == letra.charAt(0)){
+               if (palabraOculta.charAt(i) == letra.charAt(0) && (numeroFallos < 6)){
+                   
                    palabraConGuiones.setCharAt(2*i, letra.charAt(0));
                  }
             }
@@ -112,6 +126,7 @@ listaDePalabras = new String [] {"CETYS", "MERCURIO", "VENUS", "TIERRA", "MARTE"
         numeroFallos++;
         dibujaImagen(numeroFallos);
         }
+      
         if (pantalla.getText().contains("_")){
             
         }
@@ -123,6 +138,14 @@ listaDePalabras = new String [] {"CETYS", "MERCURIO", "VENUS", "TIERRA", "MARTE"
     private void chequeaBoton (JButton miBoton){
         miBoton.setEnabled(false);
         chequeaLetra(miBoton.getText());
+        
+        if (!pantalla.getText().contains("_")){
+          miBoton.setEnabled(true);
+        }
+        
+        if (numeroFallos > 6){
+           miBoton.setEnabled(true);
+        }
     }
                      //  palabraConGuiones = palabraConGuiones.substring(0, 2*i)
                      //              +letra
